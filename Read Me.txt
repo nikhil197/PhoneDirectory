@@ -1,0 +1,10 @@
+Phone Directory project is a simple phone directory which uses simple File Handling and basic C++ Object Oriented concepts to create basic functions of a phone directory like:
+-> Searching for a particular contact.
+-> Searching for people in a particular region.
+-> Searching for people having a given name.
+-> Adding a new contact to the directory.
+-> Changing the phone numbers.
+-> Deleting an entry.
+etc.
+
+Note: This assumes that a people living within a same zip code have distinct name.
