@@ -58,7 +58,7 @@ void searchByZipCode(int &zipCode)
 void searchByName(std::string &name)
 {
 	bool isPresent = false;
-	std::cout << "Entries by the name " << name << ": " << std::endl;
+	std::cout << "Entries: " << std::endl;
 	for (int i = 0; i < PhoneBookEntry::count; i++) {
 		if (isContained(name, entries[i].getName())) {
 			isPresent = true;
@@ -336,7 +336,7 @@ int main()
 			system("CLS");
 			std::cout << "\n\n \t Nikhil's Phone Directory\n" << std::endl;
 			std::cout << "\tUser's Menu" << std::endl << std::endl;
-			std::cout << "\t1. Search by Name\t\t2. Search by Zip Code" << std::endl;
+			std::cout << "\t1. Search by Nameor Character\t2. Search by Zip Code" << std::endl;
 			std::cout << "\t3. Search a Particular entry\t" << std::endl;
 			short che;
 			std::cin >> che;
@@ -369,15 +369,15 @@ int main()
 				}
 				else
 					std::cout << "There is no entry in the directory by that name.";
-
-				std::cout << "\n\n\t 1. Go to User's Menu\t2. Exit" << std::endl;
-				std::cin >> che;
-				if (che == 1)
-					continue;
-				else
-					running = false;
 				break;
 			}
+			std::cout << "\n\n\t 1. Go to User's Menu\t2. Exit" << std::endl;
+			std::cin >> che;
+			if (che == 1)
+				continue;
+			else
+				running = false;
+
 		}
 	} 
 
