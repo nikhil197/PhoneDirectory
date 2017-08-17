@@ -336,7 +336,7 @@ int main()
 			system("CLS");
 			std::cout << "\n\n \t Nikhil's Phone Directory\n" << std::endl;
 			std::cout << "\tUser's Menu" << std::endl << std::endl;
-			std::cout << "\t1. Search by Nameor Character\t2. Search by Zip Code" << std::endl;
+			std::cout << "\t1. Search by Name or Character\t2. Search by Zip Code" << std::endl;
 			std::cout << "\t3. Search a Particular entry\t" << std::endl;
 			short che;
 			std::cin >> che;
