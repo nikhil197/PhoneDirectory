@@ -23,6 +23,22 @@ bool compareStrings(std::string& str1, std::string& str2)
 	return true;
 }
 
+bool isContained(std::string &name, std::string &str)
+{
+	if (str.length() == name.length())
+		return compareStrings(name, str);
+	else if(str.length() > name.length()){
+		int len = name.length();
+		for (int i = 0; i < len; i++)
+			if (str[i] != name[i])
+				return false;
+		return true;
+	}
+
+	return false;
+
+}
+
 void searchByZipCode(int &zipCode)
 {
 	bool isPresent = false;
@@ -44,7 +60,7 @@ void searchByName(std::string &name)
 	bool isPresent = false;
 	std::cout << "Entries by the name " << name << ": " << std::endl;
 	for (int i = 0; i < PhoneBookEntry::count; i++) {
-		if (!name.compare(entries[i].getName())) {
+		if (isContained(name, entries[i].getName())) {
 			isPresent = true;
 			entries[i].showDetails();
 			std::cout << std::endl;
@@ -138,6 +154,7 @@ void changeAddress()
 	int zipCode;
 	std::cout << "Enter the name: ";
 	std::getline(std::cin, name);
+	std::getline(std::cin, name);
 
 	std::cout << "Enter the zipCode: ";
 	std::cin >> zipCode;
@@ -163,6 +180,7 @@ void deleteContact()
 	std::string name;
 	int zipCode;
 	std::cout << "Enter the name: ";
+	std::getline(std::cin, name);
 	std::getline(std::cin, name);
 
 	std::cout << "Enter the zipCode: ";
@@ -331,10 +349,12 @@ int main()
 				std::getline(std::cin, name);
 				std::getline(std::cin, name);
 				searchByName(name);
+				break;
 			case 2:
 				std::cout << "Enter the zip code: ";
 				std::cin >> zipCode;
 				searchByZipCode(zipCode);
+				break;
 
 			case 3:
 				std::cout << "Enter the name:  ";
@@ -356,10 +376,10 @@ int main()
 					continue;
 				else
 					running = false;
-
+				break;
 			}
 		}
-	}
+	} 
 
 	writeToFile();
 
