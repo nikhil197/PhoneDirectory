@@ -73,22 +73,22 @@ void PhoneBookEntry::setRemoved(bool removed)
 }
 
 //Getters
-long long PhoneBookEntry::getHomePhone()
+long long PhoneBookEntry::getHomePhone() const
 {
 	return m_homePhone;
 }
 
-std::string PhoneBookEntry::getName()
+std::string PhoneBookEntry::getName()const
 {
 	return m_Name;
 }
 
-long long PhoneBookEntry::getWorkPhone()
+long long PhoneBookEntry::getWorkPhone() const
 {
 	return m_workPhone;
 }
 
-int& PhoneBookEntry::getZipCode()
+int PhoneBookEntry::getZipCode() const
 {
 	return m_zipCode;
 }
@@ -107,7 +107,7 @@ void PhoneBookEntry::writeToFile(std::fstream *file)
 	*file << m_address << std::endl;
 }
 
-void PhoneBookEntry::showDetails()
+void PhoneBookEntry::showDetails() const 
 {
 	
 	std::cout << "Name:  " << m_Name << std::endl;

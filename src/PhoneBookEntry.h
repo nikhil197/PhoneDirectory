@@ -23,10 +23,10 @@ public:
 	virtual ~PhoneBookEntry();
 	
 	//Getters
-	long long getWorkPhone();
-	long long getHomePhone();
-	std::string getName();
-	int& getZipCode();
+	long long getWorkPhone() const;
+	long long getHomePhone() const;
+	std::string getName() const;
+	int getZipCode() const;
 	bool IsRemoved();
 
 	//Setters
@@ -36,6 +36,6 @@ public:
 	void setName(std::string &fname, std::string &lname);
 	void setRemoved(bool removed);
 
-	void showDetails();
+	void showDetails() const;
 	void writeToFile(std::fstream *file);
 };

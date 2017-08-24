@@ -2,13 +2,16 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <queue>
 
 #include "PhoneBookEntry.h"
 #include "Admin.h"
 
+std::deque<std::string> que;
 std::vector<PhoneBookEntry> entries(1);
 std::vector<Admin> admins(1);
 
+//Utility Functions
 bool compareStrings(std::string& str1, std::string& str2)
 {
 	int len1 = str1.length();
@@ -39,36 +42,66 @@ bool isContained(std::string &name, std::string &str)
 
 }
 
+void addLog(std::string log)
+{
+	if (que.size() == 10)
+		que.pop_front();
+	if (compareStrings(log, que.back()))
+		return;
+	que.push_back(log);
+}
+
+void printLog()
+{
+	std::cout << "\t Recent Searches: " << std::endl;
+	for (unsigned int i = 0; i < que.size(); i++)
+		std::cout << "\t\t " << que[i] << std::endl;
+
+	std::cout << std::endl;
+}
+
+//Searching Functions
 void searchByZipCode(int &zipCode)
 {
-	bool isPresent = false;
 	std::cout << "Entries by the zip code " << zipCode << ": " << std::endl;
-	for (int i = 0; i < PhoneBookEntry::count; i++) {
-		if (entries[i].getZipCode() == zipCode) {
-			isPresent = true;
-			entries[i].showDetails();
+	for (const auto &i : entries) {
+		if (i.getZipCode() == zipCode) {
+			i.showDetails();
 			std::cout << std::endl;
+			addLog(i.getName() + " " + std::to_string(zipCode) + " " + std::to_string(i.getHomePhone()));
 		}
 	}
 
-	if (!isPresent)
-		std::cout << "No Entry By that name" << std::endl;
+	std::cout << "No Entry By that name" << std::endl;
 }
 
 void searchByName(std::string &name)
 {
-	bool isPresent = false;
 	std::cout << "Entries: " << std::endl;
-	for (int i = 0; i < PhoneBookEntry::count; i++) {
-		if (isContained(name, entries[i].getName())) {
-			isPresent = true;
-			entries[i].showDetails();
+	for (const auto &i : entries) {
+		if (isContained(name, i.getName())) {
+			i.showDetails();
 			std::cout << std::endl;
+			addLog(i.getName() + " " + std::to_string(i.getZipCode()) + " " + std::to_string(i.getHomePhone()));
+			return;
 		}
 	}
 
-	if (!isPresent)
-		std::cout << "No Entry By that name" << std::endl;
+	std::cout << "No Entry By that name" << std::endl;
+}
+
+void searchByNumber(long long int &phone)
+{
+	std::cout << "Entry: " << std::endl;
+	for (const auto &i : entries) {
+		if (i.getHomePhone() == phone || i.getWorkPhone() == phone) {
+			i.showDetails();
+			addLog(i.getName() + " " + std::to_string(i.getZipCode()) + " " + std::to_string(phone));
+			return;
+		}
+	}
+
+	std::cout << "No such number exists in the directory." << std::endl << std::endl;
 }
 
 PhoneBookEntry* searchEntry(std::string& name, int &zipCode)
@@ -93,6 +126,8 @@ Admin* searchAdmin(std::string &name, std::string &password)
 	return NULL;
 }
 
+
+//Modification Functions
 void addNewContact()
 {
 	std::string fname, lname, address;
@@ -232,6 +267,15 @@ void readFromFile()
 	}
 
 	file.close();
+
+	file.open("log.txt", std::ios::in | std::ios::out);
+	while (!file.eof()) {
+		std::string log;
+		std::getline(file, log);
+		que.push_back(log);
+	}
+
+	file.close();
 }
 
 void writeToFile()
@@ -255,6 +299,12 @@ void writeToFile()
 	}
 	
 	file.close();
+
+	file.open("log.txt", std::ios::in | std::ios::out);
+	while (!que.empty()) {
+		file << que.back() << std::endl;
+		que.pop_back();
+	}
 }
 
 int main()
@@ -336,13 +386,17 @@ int main()
 			system("CLS");
 			std::cout << "\n\n \t Nikhil's Phone Directory\n" << std::endl;
 			std::cout << "\tUser's Menu" << std::endl << std::endl;
+			
+			printLog();
+			
 			std::cout << "\t1. Search by Name or Character\t2. Search by Zip Code" << std::endl;
-			std::cout << "\t3. Search a Particular entry\t" << std::endl;
+			std::cout << "\t3. Search a Particular entry\t4. Search using phone number." << std::endl;
 			short che;
 			std::cin >> che;
 			std::string name;
 			PhoneBookEntry *entry;
 			int zipCode;
+			long long int phone;
 			switch (che) {
 			case 1:
 				std::cout << "Enter the name: ";
@@ -366,9 +420,16 @@ int main()
 				if (entry != NULL) {
 					std::cout << "\n\tThe Phone Directory Matching the given details" << std::endl;
 					(*entry).showDetails();
+					addLog(name + " " + std::to_string(zipCode) + " " + std::to_string(entry->getHomePhone()));
 				}
 				else
 					std::cout << "There is no entry in the directory by that name.";
+				break;
+
+			case 4:
+				std::cout << "Enter the phone number: ";
+				std::cin >> phone;
+				searchByNumber(phone);
 				break;
 			}
 			std::cout << "\n\n\t 1. Go to User's Menu\t2. Exit" << std::endl;
